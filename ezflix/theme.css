@@ -33,12 +33,13 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backgroundCo
   background-color: var(--apple-bg) !important;
 }
 
-body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropContainer {
+body:not(:has(*.itemDetailPage)) .backdropContainer {
   background-color: var(--apple-bg) !important;
 }
 
-body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropContainer .backdropImage {
+body:not(:has(*.itemDetailPage)) .backdropContainer .backdropImage {
   display: none;
+  opacity: 0;
 }
 
 /* Apply Apple TV frosted glass strictly to home/library pages (excluding details and video playback) */
@@ -61,19 +62,17 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
   padding-left: 1.5rem;
 }
 
-.layout-tv .itemsContainer {
+.layout-tv .sections .itemsContainer {
   padding-top: 25px !important;
   padding-bottom: 25px !important;
 }
 
-.layout-tv .itemsContainer {
+.layout-tv .sections .itemsContainer {
   padding-left: calc(max(env(safe-area-inset-left), 3.3%) + (1.5rem)) !important;
   margin-left: calc(-1 * max(env(safe-area-inset-left), 3.3%) - 1.5rem) !important;
 
   padding-right: max(env(safe-area-inset-right), 3.3%) !important;
   margin-right: calc(-1 * max(env(safe-area-inset-right), 3.3%)) !important;
-
-  overflow: scroll;
 }
 
 .layout-tv .itemsContainer::-webkit-scrollbar {
@@ -118,10 +117,14 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
 .emby-scroller,
 .emby-scrollbuttons,
 .padded-top-focusscale {
-  overflow: visible !important;
-  overflow-y: visible !important;
+  padding-top: 15px;
   padding-bottom: 25px !important;
   scroll-padding-top: 12vh !important;
+}
+
+.layout-desktop .emby-scrollbuttons {
+  padding-top: 0px !important;
+  transform: translateY(-0.75rem);
 }
 
 /* --- 3. Card Proportions & tvOS Focus --- */
@@ -213,7 +216,7 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
   box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.15) !important;
   pointer-events: none !important;
   display: block !important;
-  z-index: 10 !important;
+  z-index: 50 !important;
 }
 
 /* --- 4. Card Typography --- */
@@ -338,7 +341,7 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
 .cardOverlayButton-br button {
   background: transparent !important;
   color: #ffffff !important;
-  filter: drop-shadow(5px 5px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.5));
 }
 
 .cardOverlayButton-br button:hover {
@@ -360,6 +363,34 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
   z-index: 100 !important;
 }
 
+/* --- TV Header Styling Fix --- */
+.layout-tv .skinHeader {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85) 0%, transparent 100%) !important;
+  border-bottom: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+}
+
+.layout-tv .skinHeader .headerTop {
+  pointer-events: auto !important;
+}
+
+.skinHeader .headerRight {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+}
+
+.skinHeader .headerRight .emby-button {
+  position: relative !important;
+  margin: 0 4px !important;
+  flex-shrink: 0 !important;
+}
+
 .headerTabButton {
   border-radius: var(--apple-radius-pill) !important;
   font-size: 0.88rem !important;
@@ -373,6 +404,45 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
 .headerTabButton.emby-tab-button-active {
   color: var(--apple-text-primary) !important;
   background: var(--apple-surface) !important;
+}
+
+/* --- TV Header Navigation Tabs (WebOS 1.2.x / Jellyfin 10.9+) --- */
+.layout-tv .skinHeader .emby-tab-button {
+  border-radius: var(--apple-radius-pill) !important;
+  background: transparent !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 0.75rem 1.5rem !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.01em !important;
+  text-transform: capitalize !important;
+  transition: all 0.2s var(--apple-ease) !important;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-inline: 0.5rem;
+}
+
+.layout-tv .skinHeader .emby-tab-button-active {
+  background: #ffffff !important;
+  color: #000000 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
+  transform: scale(1.05) !important;
+}
+
+/* Hover, Focus, and Active states */
+.layout-tv .skinHeader .emby-tab-button:hover,
+.layout-tv .skinHeader .emby-tab-button:focus {
+  background: #ffffff3f !important;
+  color: #ffffff !important;
+  transform: scale(1.05) !important;
+}
+
+.layout-tv .skinHeader .emby-tab-button-active:hover,
+.layout-tv .skinHeader .emby-tab-button-active:focus {
+  background: #ffffff !important;
+  color: #000000 !important;
+  transform: scale(1.1) !important;
 }
 
 .headerButton {
@@ -431,13 +501,17 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
   box-shadow: 0 6px 24px rgba(255, 255, 255, 0.4) !important;
 }
 
-.button-flat,
-.button-link {
+.button-flat {
+  color: var(--apple-text-primary) !important;
   background: var(--apple-surface) !important;
+  border: 1px solid var(--apple-border) !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
-  border: 1px solid var(--apple-border) !important;
+}
+
+.button-link {
   color: var(--apple-text-primary) !important;
+  padding-inline: 4px;
 }
 
 .button-flat:hover,
@@ -630,8 +704,8 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
   height: 45vh;
 }
 
-.layout-tv #itemBackdrop {
-  height: 15vh;
+.layout-tv .itemDetailPage {
+  padding-top: 45vh !important;
 }
 
 /* Metadata formatting */
@@ -660,21 +734,33 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
   margin: 0 0 0rem 0 !important;
 }
 
-/* Secondary Action Buttons (Circular Icons) */
-.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button:not(.btnPlay):not(.btnReplay) {
+/* Secondary Action Buttons */
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button:not(.btnPlay) {
   background: rgba(255, 255, 255, 0.15) !important;
-  /* border: 2px solid rgba(255, 255, 255, 0.6) !important; */
-  border-radius: 50% !important;
+  border-radius: var(--apple-radius-pill) !important;
   padding: 0.75rem !important;
   min-width: 0 !important;
-  margin: 0 !important;
-  aspect-ratio: 1 !important;
   color: #ffffff !important;
+  margin: 0 !important;
   backdrop-filter: blur(10px) !important;
 }
 
-.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button:not(.btnPlay):not(.btnReplay):hover {
+/* Secondary Action Buttons (Circular Icons) */
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button:not(.btnPlay):not(.btnReplay) {
+  border-radius: 50% !important;
+  aspect-ratio: 1 !important;
+}
+
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button:hover,
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button:focus {
   transform: scale(1.05) !important;
+}
+
+/* Secondary Action Buttons hover (Circular Icons) */
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button:not(.btnPlay):not(.btnReplay):hover,
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button:not(.btnPlay):not(.btnReplay):focus {
+  transform: scale(1.1) !important;
 }
 
 .itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button .material-icons {
@@ -735,11 +821,12 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
 }
 
 /* TV Scroll Fix: Forces the TV to leave space above the buttons, protecting the logo */
-.layout-tv .itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button {
-  scroll-margin-top: 35vh !important;
+.layout-tv .itemDetailPage .mainDetailButtons,
+.layout-tv .itemDetailPage .mainDetailButtons button {
+  scroll-margin-top: 45vh !important;
 }
 
-/* When Watch from beginning is visible on TV, switch the layout */
+/* When Watch from beginning is visible, switch the layout */
 .itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons:not(:has(button.btnReplay.hide)) {
   display: grid !important;
   grid-template-columns: repeat(8, 1fr);
@@ -791,10 +878,112 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9) !important;
 }
 
-.itemDetailPage:not(:has([data-type="video-osd"])) .verticalSection {
-  padding-left: 2.25em;
+/* -------------------------------------------------------------
+  FIXED: Target ONLY the secondary container for alignment
+------------------------------------------------------------- */
+.itemDetailPage .detailPageSecondaryContainer {
+  overflow: visible !important;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailPageSecondaryContainer .verticalSection {
+  margin-left: calc(-1 * max(env(safe-area-inset-left), 3.3%)) !important;
+  padding-left: calc(2 * max(env(safe-area-inset-left), 3.3%)) !important;
+}
+
+.layout-tv .detailPageSecondaryContainer .verticalSection .itemsContainer {
+  padding-top: 25px !important;
+}
+
+.layout-tv .detailPageSecondaryContainer .verticalSection .emby-scroller {
+  margin-left: calc(-2 * max(env(safe-area-inset-left), 3.3%)) !important;
+  padding-left: calc(2 * max(env(safe-area-inset-left), 3.3%)) !important;
 }
 
 .hide {
   display: none !important;
+}
+
+.selectContainer {
+  align-items: center;
+}
+
+select.emby-select {
+  padding-inline: 0.75rem !important;
+  padding-block: 0.5rem !important;
+  background: var(--apple-surface);
+  border-radius: var(--apple-radius-pill);
+}
+
+.selectArrowContainer {
+  top: .5rem;
+}
+
+[dir=ltr] .selectArrowContainer {
+  right: .75rem;
+}
+
+.chapterCard .innerCardFooter {
+  padding: 0.25rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background-color: transparent;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9) 0%, transparent 40%, transparent 75%, rgba(0, 0, 0, 0.9) 100%);
+}
+
+.chapterCard:hover .innerCardFooter {
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  border-radius: calc(var(--apple-card-radius) - 3px);
+}
+
+.chapterCard .innerCardFooter .cardText {
+  filter: drop-shadow(0px 0px 15px rgba(0, 0, 0, 0.5));
+}
+
+.chapterCard .innerCardFooter .cardText:first-child {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+
+  font-style: italic;
+}
+
+@supports (counter-reset: sibling-index) {
+  #scenesContent {
+    counter-reset: sibling-index;
+  }
+
+  .chapterCard {
+    counter-increment: sibling-index;
+  }
+
+  .chapterCard .innerCardFooter .cardText:first-child::before {
+    content: counter(sibling-index) ": ";
+  }
+}
+
+.chapterCard:focus-within .innerCardFooter .cardText:first-child,
+.chapterCard:focus .innerCardFooter .cardText:first-child,
+.chapterCard:hover .innerCardFooter .cardText:first-child {
+  top: calc(0.75rem - 1.5px);
+  left: calc(0.75rem - 1.5px);
+}
+
+.chapterCard .innerCardFooter .cardText:last-child {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  font-size: small;
+}
+
+.chapterCard:focus-within .innerCardFooter .cardText:last-child,
+.chapterCard:focus .innerCardFooter .cardText:last-child,
+.chapterCard:hover .innerCardFooter .cardText:last-child {
+  bottom: calc(0.75rem - 1.5px);
+  right: calc(0.75rem - 1.5px);
 }
