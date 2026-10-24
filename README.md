@@ -1,6 +1,6 @@
 # Ezflix
 
-Modern, responsive theme for Jellyfin.
+Modern, responsive theme for Jellyfin. Built for the best experience on Desktops and TVs.
 
 ## Note
 
