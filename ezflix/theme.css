@@ -1,0 +1,800 @@
+/* ==========================================================================
+  Apple TV (tvOS) Multi-Device Theme for Jellyfin 12
+  ========================================================================== */
+
+/* Load Inter font to ensure consistent Apple-like typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* --- 1. Global Design Tokens & Typography --- */
+:root {
+  --apple-font: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+  --apple-bg: #0b0c10;
+  --apple-surface: rgba(255, 255, 255, 0.08);
+  --apple-border: rgba(255, 255, 255, 0.12);
+  --apple-text-primary: #f5f5f7;
+  --apple-text-secondary: rgba(235, 235, 245, 0.60);
+  --apple-card-radius: 16px;
+  --apple-radius-pill: 9999px;
+  --apple-ease: cubic-bezier(0.25, 1, 0.5, 1);
+  --apple-focus-glow: 0 16px 36px rgba(0, 0, 0, 0.75);
+}
+
+/* Base background MUST be transparent so backdrops can show through */
+html,
+body {
+  font-family: var(--apple-font) !important;
+  background-color: transparent !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Apply the dark background ONLY to home/library pages (excluding details and video playback) */
+body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backgroundContainer:not(.withBackdrop) {
+  background-color: var(--apple-bg) !important;
+}
+
+body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropContainer {
+  background-color: var(--apple-bg) !important;
+}
+
+body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropContainer .backdropImage {
+  display: none;
+}
+
+/* Apply Apple TV frosted glass strictly to home/library pages (excluding details and video playback) */
+.page:not(.itemDetailPage):not(:has([data-type="video-osd"]))::before {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(11, 12, 16, 0.45) !important;
+  z-index: -1 !important;
+  pointer-events: none !important;
+}
+
+/* --- 2. Section Header & Track Alignment --- */
+
+.homeSectionsContainer {
+  padding-top: 1rem;
+}
+
+.layout-tv .homeSectionsContainer {
+  padding-left: 1.5rem;
+}
+
+.layout-tv .itemsContainer {
+  padding-top: 25px !important;
+  padding-bottom: 25px !important;
+}
+
+.layout-tv .itemsContainer {
+  padding-left: calc(max(env(safe-area-inset-left), 3.3%) + (1.5rem)) !important;
+  margin-left: calc(-1 * max(env(safe-area-inset-left), 3.3%) - 1.5rem) !important;
+
+  padding-right: max(env(safe-area-inset-right), 3.3%) !important;
+  margin-right: calc(-1 * max(env(safe-area-inset-right), 3.3%)) !important;
+
+  overflow: scroll;
+}
+
+.layout-tv .itemsContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.sectionTitle,
+.sectionTitleTextButton,
+.sectionTitleContainer>.emby-button {
+  background: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--apple-text-primary) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.35rem;
+  outline: none !important;
+}
+
+.sectionTitleTextButton:hover,
+.sectionTitleTextButton:focus,
+.sectionTitleContainer>.emby-button:hover,
+.sectionTitleContainer>.emby-button:focus {
+  background: none !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+}
+
+.sectionTitleTextButton>.material-icons {
+  font-size: 1.1rem !important;
+  opacity: 0.6;
+}
+
+.emby-scroller,
+.emby-scrollbuttons,
+.padded-top-focusscale {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  padding-bottom: 25px !important;
+  scroll-padding-top: 12vh !important;
+}
+
+/* --- 3. Card Proportions & tvOS Focus --- */
+.card {
+  border-radius: var(--apple-card-radius) !important;
+  margin-right: 1.2rem !important;
+  outline: none !important;
+  border: none !important;
+  overflow: visible !important;
+  contain: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.cardBox {
+  transition: transform 0.26s var(--apple-ease), z-index 0.26s !important;
+  overflow: visible !important;
+  height: auto !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.cardContent {
+  overflow: visible !important;
+  height: auto !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.cardScalable,
+.cardImageContainer {
+  border-radius: var(--apple-card-radius) !important;
+  overflow: hidden !important;
+  outline: none !important;
+  border: none !important;
+}
+
+.layout-tv .cardBox:focus,
+.layout-tv .cardBox:focus-within,
+.layout-tv .itemAction:focus,
+.itemAction:focus,
+.cardBox:focus-within {
+  border: none !important;
+  border-color: transparent !important;
+  background-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.layout-tv .cardBox::before,
+.layout-tv .cardBox::after,
+.cardBox:focus-within::before,
+.cardBox:focus-within::after,
+.itemAction::before,
+.itemAction::after {
+  display: none !important;
+}
+
+.card:hover .cardBox,
+.card:focus-within .cardBox,
+.cardBox:focus-within {
+  transform: scale(1.05) translateY(-4px) !important;
+  z-index: 20 !important;
+}
+
+.card:hover .cardImageContainer,
+.card:focus-within .cardImageContainer,
+.cardBox:focus-within .cardImageContainer {
+  box-shadow: var(--apple-focus-glow) !important;
+}
+
+.card:hover .cardImageContainer::after,
+.card:focus-within .cardImageContainer::after,
+.cardBox:focus-within .cardImageContainer::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 0px !important;
+  left: 0px !important;
+  right: 0px !important;
+  bottom: 0px !important;
+  border-radius: var(--apple-card-radius) !important;
+  border: 3px solid #ffffff !important;
+  outline: 3px solid #ffffff !important;
+  outline-offset: 2px;
+  box-sizing: border-box !important;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.15) !important;
+  pointer-events: none !important;
+  display: block !important;
+  z-index: 10 !important;
+}
+
+/* --- 4. Card Typography --- */
+.cardFooter {
+  height: auto !important;
+  min-height: 48px !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 0 2px 12px 2px !important;
+  background: transparent !important;
+}
+
+.cardText {
+  padding: 0 !important;
+  text-align: left !important;
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  white-space: normal !important;
+}
+
+.cardText-first {
+  margin: 12px 0 0 0 !important;
+  font-size: 0.92rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.015em !important;
+  color: var(--apple-text-primary) !important;
+  line-height: 1.25 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.cardText-secondary {
+  margin: 4px 0 0 0 !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  height: auto !important;
+  max-height: none !important;
+  color: var(--apple-text-secondary) !important;
+  display: block !important;
+  overflow: visible !important;
+}
+
+/* --- 5. Indicators & Overlays --- */
+.cardIndicators,
+.innerCardIndicators {
+  top: 10px !important;
+  right: 10px !important;
+  bottom: auto !important;
+  left: auto !important;
+}
+
+.playedIndicator,
+.indicator,
+.cardIndicators .indicator,
+.innerCardIndicators .indicator {
+  position: static !important;
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  max-width: 22px !important;
+  max-height: 22px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 50% !important;
+  background: rgba(0, 113, 227, 0.88) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.playedIndicator .material-icons,
+.cardIndicators .indicator .material-icons,
+.innerCardIndicators .indicator .material-icons {
+  font-size: 13px !important;
+  line-height: 1 !important;
+  color: #ffffff !important;
+}
+
+.cardOverlayContainer {
+  background: rgba(0, 0, 0, 0.35) !important;
+  border-radius: calc(var(--apple-card-radius) - 3px);
+  margin: 3px;
+  /* backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px); */
+}
+
+
+.cardOverlayButton {
+  background: rgba(255, 255, 255, 0.4) !important;
+  color: #000000 !important;
+  border-radius: 50% !important;
+  transition: transform 0.2s ease, background 0.2s ease !important;
+  transform: scale(0.9);
+}
+
+.cardOverlayButton:hover {
+  background: #ffffff !important;
+  color: #000000 !important;
+  transform: scale(1);
+}
+
+.cardOverlayButton-br {
+  top: 2px;
+  right: 2px;
+  bottom: auto;
+  gap: 4px;
+  /* display: none; */
+}
+
+.cardOverlayButton-br button:not([data-action="menu"]) {
+  display: none;
+}
+
+.cardOverlayButton-br button {
+  background: transparent !important;
+  color: #ffffff !important;
+  filter: drop-shadow(5px 5px rgba(0, 0, 0, 0.5));
+}
+
+.cardOverlayButton-br button:hover {
+  background: rgba(255, 255, 255, 0.5) !important;
+  transform: scale(1) !important;
+}
+
+/* --- 6. Navigation Header & Dialogs --- */
+.skinHeader {
+  background: rgba(11, 12, 16, 0.72) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+  border-bottom: 1px solid var(--apple-border) !important;
+  padding: 0.4rem 1.5rem !important;
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100 !important;
+}
+
+.headerTabButton {
+  border-radius: var(--apple-radius-pill) !important;
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  padding: 0.45rem 1rem !important;
+  color: var(--apple-text-secondary) !important;
+  transition: all 0.2s var(--apple-ease) !important;
+}
+
+.headerTabButton:hover,
+.headerTabButton.emby-tab-button-active {
+  color: var(--apple-text-primary) !important;
+  background: var(--apple-surface) !important;
+}
+
+.headerButton {
+  border-radius: 50% !important;
+}
+
+.mainDrawer,
+.dialog,
+.toast,
+.actionSheet {
+  background: rgba(18, 19, 25, 0.78) !important;
+  backdrop-filter: blur(28px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+  border: 1px solid var(--apple-border) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.7) !important;
+}
+
+.mainDrawer {
+  border-radius: 0 24px 24px 0 !important;
+}
+
+.navMenuOption:hover,
+.navMenuOption:focus,
+.actionSheetMenuItem:hover,
+.actionSheetMenuItem:focus {
+  background: rgba(255, 255, 255, 0.14) !important;
+  border-radius: 12px;
+}
+
+/* --- 7. Buttons & Progress Bars --- */
+.raised,
+.fab,
+.button-flat {
+  border-radius: var(--apple-radius-pill) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em;
+  transition: all 0.2s var(--apple-ease) !important;
+  outline: none !important;
+}
+
+.button-submit,
+.btnPlay {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: none !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
+  border-radius: var(--apple-radius-pill) !important;
+}
+
+.button-submit:hover,
+.button-submit:focus,
+.btnPlay:hover,
+.btnPlay:focus {
+  transform: scale(1.05) !important;
+  box-shadow: 0 6px 24px rgba(255, 255, 255, 0.4) !important;
+}
+
+.button-flat,
+.button-link {
+  background: var(--apple-surface) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--apple-border) !important;
+  color: var(--apple-text-primary) !important;
+}
+
+.button-flat:hover,
+.button-flat:focus {
+  background: rgba(255, 255, 255, 0.22) !important;
+  transform: scale(1.04);
+}
+
+.itemProgressBar {
+  background: rgba(255, 255, 255, 0.2) !important;
+  height: 4px !important;
+  border-radius: 2px !important;
+}
+
+.itemProgressBarForeground {
+  background: #ffffff !important;
+  border-radius: 2px !important;
+}
+
+
+.card .cardImageContainer .itemProgressBar {
+  margin: 1rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.6);
+}
+
+.layout-tv .card .cardImageContainer .itemProgressBar {
+  height: 6px !important;
+  border-radius: 3px !important;
+  box-shadow: none;
+}
+
+/* --- 8. Responsive Breakpoints --- */
+@media (min-width: 1400px) and (orientation: landscape),
+(hover: none) and (min-width: 1024px) {
+  :root {
+    --apple-card-radius: 20px;
+    --apple-focus-glow: 0 24px 48px rgba(0, 0, 0, 0.85);
+  }
+
+  .card:hover .cardBox,
+  .card:focus-within .cardBox,
+  .cardBox:focus-within {
+    transform: scale(1.08) translateY(-6px) !important;
+  }
+
+  .sectionTitle {
+    font-size: 1.6rem !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  ::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.32);
+  }
+}
+
+/* --- 9. Disney+ Style Item Details Page (Excluded when video-osd is active) --- */
+
+/* Reveal Background Layers so root backdropImage is visible */
+.itemDetailPage:not(:has([data-type="video-osd"])) .backgroundContainer,
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailPageWrapperContainer,
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainAnimatedPages {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Disney+ Gradient Overlay across the page for text readability */
+.backgroundContainer.withBackdrop {
+  background-color: rgba(11, 12, 16, 0.35);
+  background: linear-gradient(to right, rgba(2, 2, 2, 0.9) 10%, rgba(2, 2, 2) 30%, transparent 75%),
+    linear-gradient(to top, rgba(2, 2, 2, 1) 0%, transparent 50%),
+    linear-gradient(to bottom, rgba(2, 2, 2, 1) 0%, transparent 25%);
+}
+
+/* Hide the vertical poster */
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailImageContainer {
+  display: none !important;
+}
+
+/* Restored Flex Layout: Force everything to the left in a clean column */
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailPagePrimaryContainer {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  padding-top: 2.5vh !important;
+  padding-left: max(6vw, 30px) !important;
+  max-width: 60vw !important;
+  z-index: 10 !important;
+  position: relative !important;
+}
+
+.layout-tv .detailPagePrimaryContainer {
+  min-height: 100vh;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailPageSecondaryContainer {
+  background-color: transparent;
+  background: linear-gradient(to bottom, transparent 0%, rgba(11, 12, 16, 0.8) 15%);
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .infoWrapper,
+.itemDetailPage:not(:has([data-type="video-osd"])) .nameContainer,
+.itemDetailPage:not(:has([data-type="video-osd"])) .itemMiscInfo,
+.itemDetailPage:not(:has([data-type="video-osd"])) .overview {
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+  margin-left: 0 !important;
+}
+
+[dir=ltr] .mediaInfoItem {
+  margin: 0 0.75em 0 0;
+}
+
+/* Logo Sizing and Placement - ONLY the logo is shifted to the right */
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailLogo {
+  position: static !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: 450px !important;
+  height: 140px !important;
+  object-fit: contain !important;
+  object-position: left center !important;
+  background-size: contain !important;
+  background-position: left center !important;
+  background-repeat: no-repeat !important;
+  margin-left: max(6vw, 30px) !important;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6)) !important;
+}
+
+/* Hide text title if a logo image is present */
+.itemDetailPage:not(:has([data-type="video-osd"])):has(.detailLogo) .itemName,
+.itemDetailPage:not(:has([data-type="video-osd"])):has(.detailLogo) .parentNameLast,
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailLogo~.itemName,
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailLogo+.itemName,
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailLogo~*~.itemName {
+  display: none !important;
+}
+
+/* Fallback styling if text title is used */
+.itemDetailPage:not(:has([data-type="video-osd"])) .itemName {
+  font-size: 3.2rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.04em !important;
+  margin: 0 0 1rem 0 !important;
+  line-height: 1.1 !important;
+  text-align: left !important;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Ribbon Layout */
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailRibbon {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  height: auto !important;
+}
+
+@supports (width:max(1px, 1px)) {
+  [dir=ltr] .detailPagePrimaryContent {
+    padding-left: max(env(safe-area-inset-left), 0);
+    padding-bottom: 3.3%;
+  }
+}
+
+.verticalSection-extrabottompadding {
+  margin-bottom: 1em;
+}
+
+#itemBackdrop {
+  height: 45vh;
+}
+
+.layout-tv #itemBackdrop {
+  height: 15vh;
+}
+
+/* Metadata formatting */
+.itemDetailPage:not(:has([data-type="video-osd"])) .itemMiscInfo:not(.hide),
+.itemDetailPage:not(:has([data-type="video-osd"])) .itemMiscInfoPrimary:not(.hide) {
+  order: -1 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 0.8rem !important;
+  font-size: 1.05rem !important;
+  font-weight: 600 !important;
+  color: var(--apple-text-primary) !important;
+  margin-bottom: 1.5rem !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Main Detail Buttons Container with 16px Gap */
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 16px !important;
+  margin: 0 0 0rem 0 !important;
+}
+
+/* Secondary Action Buttons (Circular Icons) */
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button:not(.btnPlay):not(.btnReplay) {
+  background: rgba(255, 255, 255, 0.15) !important;
+  /* border: 2px solid rgba(255, 255, 255, 0.6) !important; */
+  border-radius: 50% !important;
+  padding: 0.75rem !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  aspect-ratio: 1 !important;
+  color: #ffffff !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button:not(.btnPlay):not(.btnReplay):hover {
+  transform: scale(1.05) !important;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button .material-icons {
+  margin: 0 !important;
+  font-size: 1.5rem !important;
+  color: inherit !important;
+}
+
+/* Primary Action Buttons (Play, Resume, Continue Watching, etc.): Solid White BG with Black Text/Icon */
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnPlay {
+  border-radius: var(--apple-radius-pill) !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: none !important;
+  padding: 0.75rem 1.5rem !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.01em;
+  text-transform: capitalize;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnPlay:hover {
+  background: rgba(255, 255, 255, 0.85) !important;
+  color: #000000 !important;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnPlay:hover,
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnReplay:hover {
+  transform: scale(1.05) !important;
+}
+
+/* Force text and icons inside primary action buttons to render in black */
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnPlay * {
+  color: #000000 !important;
+  fill: #000000 !important;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button .detailButton-content {
+  flex-direction: row;
+  gap: 0.5em;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button .detailButton-content::after {
+  text-transform: capitalize;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnPlay[title="Play"] .detailButton-content::after {
+  content: "Play";
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnPlay[title="Resume"] .detailButton-content::after {
+  content: "Continue Watching";
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnReplay[data-action="play"] .detailButton-content::after {
+  content: "Watch from Beginning";
+}
+
+/* TV Scroll Fix: Forces the TV to leave space above the buttons, protecting the logo */
+.layout-tv .itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button {
+  scroll-margin-top: 35vh !important;
+}
+
+/* When Watch from beginning is visible on TV, switch the layout */
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons:not(:has(button.btnReplay.hide)) {
+  display: grid !important;
+  grid-template-columns: repeat(8, 1fr);
+  row-gap: 6px !important;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnPlay {
+  grid-column-start: 1;
+  grid-column-end: 5;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnReplay {
+  grid-column-start: 1;
+  grid-column-end: 5;
+
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+
+.layout-tv .itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnMoreCommands {
+  display: none;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailPagePrimaryContent .detailSection {
+  display: grid;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailPagePrimaryContent .detailSection .detailSectionContent {
+  grid-row-start: 1;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailPagePrimaryContent .detailSection .detailSectionContent *:empty {
+  display: none;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailPagePrimaryContent .detailSection .detailSectionContent .tagline {
+  font-style: italic;
+}
+
+/* Synopsis / Overview */
+.itemDetailPage:not(:has([data-type="video-osd"])) .overview {
+  font-size: 1.1rem !important;
+  line-height: 1.6 !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+  font-weight: 400 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  text-align: left !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9) !important;
+}
+
+.itemDetailPage:not(:has([data-type="video-osd"])) .verticalSection {
+  padding-left: 2.25em;
+}
+
+.hide {
+  display: none !important;
+}
