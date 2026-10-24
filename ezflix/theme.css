@@ -72,8 +72,6 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
 
   padding-right: max(env(safe-area-inset-right), 3.3%) !important;
   margin-right: calc(-1 * max(env(safe-area-inset-right), 3.3%)) !important;
-
-  overflow: scroll;
 }
 
 .layout-tv .itemsContainer::-webkit-scrollbar {
@@ -118,8 +116,6 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
 .emby-scroller,
 .emby-scrollbuttons,
 .padded-top-focusscale {
-  overflow: visible !important;
-  overflow-y: visible !important;
   padding-bottom: 25px !important;
   scroll-padding-top: 12vh !important;
 }
@@ -545,7 +541,7 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
   position: relative !important;
 }
 
-.layout-tv .detailPagePrimaryContainer {
+.layout-tv .detailPagePrimaryContainer{
   min-height: 100vh;
 }
 
@@ -631,7 +627,7 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
 }
 
 .layout-tv #itemBackdrop {
-  height: 15vh;
+  height: 5vh;
 }
 
 /* Metadata formatting */
@@ -674,7 +670,7 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
 }
 
 .itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button:not(.btnPlay):not(.btnReplay):hover {
-  transform: scale(1.05) !important;
+  transform: scale(1.1) !important;
 }
 
 .itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button .material-icons {
@@ -700,10 +696,6 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
 .itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnPlay:hover {
   background: rgba(255, 255, 255, 0.85) !important;
   color: #000000 !important;
-}
-
-.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnPlay:hover,
-.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnReplay:hover {
   transform: scale(1.05) !important;
 }
 
@@ -734,34 +726,6 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
   content: "Watch from Beginning";
 }
 
-/* TV Scroll Fix: Forces the TV to leave space above the buttons, protecting the logo */
-.layout-tv .itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons button {
-  scroll-margin-top: 35vh !important;
-}
-
-/* When Watch from beginning is visible on TV, switch the layout */
-.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons:not(:has(button.btnReplay.hide)) {
-  display: grid !important;
-  grid-template-columns: repeat(8, 1fr);
-  row-gap: 6px !important;
-}
-
-.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnPlay {
-  grid-column-start: 1;
-  grid-column-end: 5;
-}
-
-.itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnReplay {
-  grid-column-start: 1;
-  grid-column-end: 5;
-
-  grid-row-start: 2;
-  grid-row-end: 3;
-}
-
-.layout-tv .itemDetailPage:not(:has([data-type="video-osd"])) .mainDetailButtons .btnMoreCommands {
-  display: none;
-}
 
 .itemDetailPage:not(:has([data-type="video-osd"])) .detailPagePrimaryContent .detailSection {
   display: grid;
@@ -791,10 +755,11 @@ body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backdropCont
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9) !important;
 }
 
+
 .itemDetailPage:not(:has([data-type="video-osd"])) .verticalSection {
   padding-left: 2.25em;
 }
 
-.hide {
+.hide{
   display: none !important;
 }
