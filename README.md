@@ -27,3 +27,5 @@ add on custom css
 ![Item Details - Desktop](./assets/item-details-desktop.png)
 
 ![Item Details 2 - Desktop](./assets/item-details-2-desktop.png)
+
+![Collection Details - Desktop](./assets/collection-details-desktop.png)
