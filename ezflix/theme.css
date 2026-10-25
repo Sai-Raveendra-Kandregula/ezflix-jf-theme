@@ -29,8 +29,18 @@ body {
 }
 
 /* Apply the dark background ONLY to home/library pages (excluding details and video playback) */
-body:not(:has(*.itemDetailPage)):not(:has(*.videoPlayerContainer)) .backgroundContainer:not(.withBackdrop) {
+.backgroundContainer:not(.withBackdrop):not(.backgroundContainer-transparent) {
   background-color: var(--apple-bg) !important;
+  background: linear-gradient(to right, var(--apple-bg) 0%, #0b0c10b7 50%), linear-gradient(to top, var(--apple-bg) 0%, #0b0c10b7 50%) !important;
+}
+
+body:has(*.homePage) .backgroundContainer {
+  background: #0b0c10af;
+}
+
+body:has(*.homePage) .backdropContainer {
+  filter: blur(10px);
+  transform: scale(1.05);
 }
 
 body:not(:has(*.itemDetailPage)) .backdropContainer {
@@ -43,14 +53,14 @@ body:not(:has(*.itemDetailPage)) .backdropContainer .backdropImage {
 }
 
 /* Apply Apple TV frosted glass strictly to home/library pages (excluding details and video playback) */
-.page:not(.itemDetailPage):not(:has([data-type="video-osd"]))::before {
+/* .page:not(.itemDetailPage):not(:has([data-type="video-osd"]))::before {
   content: "" !important;
   position: fixed !important;
   inset: 0 !important;
   background: rgba(11, 12, 16, 0.45) !important;
   z-index: -1 !important;
   pointer-events: none !important;
-}
+} */
 
 /* --- 2. Section Header & Track Alignment --- */
 
@@ -601,13 +611,22 @@ body:not(:has(*.itemDetailPage)) .backdropContainer .backdropImage {
     linear-gradient(to bottom, rgba(2, 2, 2, 1) 0%, transparent 25%);
 }
 
-/* Hide the vertical poster */
-.itemDetailPage:not(:has([data-type="video-osd"])) .detailImageContainer {
+#itemBackdrop {
+  height: 45vh;
+}
+
+.layout-tv .itemDetailPage {
+  padding-top: 45vh !important;
+}
+
+
+/* Hide the vertical poster for movie or anything else that has a detailLogo */
+.itemDetailPage:has(*.detailLogo.lazy) .detailPagePrimaryContainer .detailImageContainer {
   display: none !important;
 }
 
 /* Restored Flex Layout: Force everything to the left in a clean column */
-.itemDetailPage:not(:has([data-type="video-osd"])) .detailPagePrimaryContainer {
+.itemDetailPage:has(*.detailLogo.lazy) .detailPagePrimaryContainer {
   display: flex !important;
   flex-direction: column !important;
   align-items: flex-start !important;
@@ -617,6 +636,59 @@ body:not(:has(*.itemDetailPage)) .backdropContainer .backdropImage {
   max-width: 60vw !important;
   z-index: 10 !important;
   position: relative !important;
+}
+
+/* Poster mode */
+.itemDetailPage:not(:has(*.detailLogo.lazy)) .detailPagePrimaryContainer {
+  padding-left: max(env(safe-area-inset-left), 4rem);
+  padding-right: max(env(safe-area-inset-right), 4rem);
+
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 4rem;
+}
+
+.itemDetailPage:not(:has(*.detailLogo.lazy)) .detailPagePrimaryContainer *{
+  min-width: 0;
+}
+
+.itemDetailPage:not(:has(*.detailLogo.lazy)) .detailPagePrimaryContainer .detailImageContainer {
+  grid-row-start: 1;
+  grid-row-end: 2;
+  
+  grid-column-start: 1;
+  grid-column-end: 2;
+  
+  pointer-events: none;
+
+}
+
+.itemDetailPage:not(:has(*.detailLogo.lazy)) .detailPagePrimaryContainer .detailRibbon
+{
+  grid-column-start: 2;
+  grid-column-end: 3;
+
+  height: min-content !important;
+  align-self: end;
+} 
+
+.itemDetailPage:not(:has(*.detailLogo.lazy)) .detailPagePrimaryContainer .detailPagePrimaryContent,
+.itemDetailPage:not(:has(*.detailLogo.lazy)) .detailPagePrimaryContainer .detailPageSecondaryContent 
+{
+  grid-column-start: 1;
+  grid-column-end: 3;
+} 
+
+
+.detailImageContainer .card {
+  position: unset;
+  width: 20vw !important;
+  margin-bottom: 0 !important;
+  float: none !important;
+}
+
+.itemDetailPage:not(:has(*.detailLogo.lazy)) #itemBackdrop {
+  height: 6.5rem;
 }
 
 .layout-tv .detailPagePrimaryContainer {
@@ -645,7 +717,7 @@ body:not(:has(*.itemDetailPage)) .backdropContainer .backdropImage {
 /* Logo Sizing and Placement - ONLY the logo is shifted to the right */
 .itemDetailPage:not(:has([data-type="video-osd"])) .detailLogo {
   position: static !important;
-  display: block !important;
+  display: block;
   width: 100% !important;
   max-width: 450px !important;
   height: 140px !important;
@@ -659,11 +731,11 @@ body:not(:has(*.itemDetailPage)) .backdropContainer .backdropImage {
 }
 
 /* Hide text title if a logo image is present */
-.itemDetailPage:not(:has([data-type="video-osd"])):has(.detailLogo) .itemName,
-.itemDetailPage:not(:has([data-type="video-osd"])):has(.detailLogo) .parentNameLast,
-.itemDetailPage:not(:has([data-type="video-osd"])) .detailLogo~.itemName,
-.itemDetailPage:not(:has([data-type="video-osd"])) .detailLogo+.itemName,
-.itemDetailPage:not(:has([data-type="video-osd"])) .detailLogo~*~.itemName {
+.itemDetailPage:not(:has([data-type="video-osd"])):has(.detailLogo.lazy) .itemName,
+.itemDetailPage:not(:has([data-type="video-osd"])):has(.detailLogo.lazy) .parentNameLast,
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailLogo.lazy~.itemName,
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailLogo.lazy+.itemName,
+.itemDetailPage:not(:has([data-type="video-osd"])) .detailLogo.lazy~*~.itemName {
   display: none !important;
 }
 
@@ -698,14 +770,6 @@ body:not(:has(*.itemDetailPage)) .backdropContainer .backdropImage {
 
 .verticalSection-extrabottompadding {
   margin-bottom: 1em;
-}
-
-#itemBackdrop {
-  height: 45vh;
-}
-
-.layout-tv .itemDetailPage {
-  padding-top: 45vh !important;
 }
 
 /* Metadata formatting */
@@ -986,4 +1050,42 @@ select.emby-select {
 .chapterCard:hover .innerCardFooter .cardText:last-child {
   bottom: calc(0.75rem - 1.5px);
   right: calc(0.75rem - 1.5px);
+}
+
+.collectionItems .verticalSection {
+  margin-top: 1rem;
+  margin-left: calc(-1 * max(env(safe-area-inset-left), 3.3%));
+}
+
+.collectionItems .itemsContainer {
+  padding-top: 10px;
+}
+
+/* Collection Items Card Styles */
+@media (min-width: 75em) {
+  .portraitCard {
+    width: 12.5%;
+  }
+}
+
+@media (min-width: 50em) {
+  .portraitCard {
+    width: 16%;
+  }
+}
+
+@media (min-width: 43.75em) {
+  .portraitCard {
+    width: 18%;
+  }
+}
+
+@media (min-width: 31.25em) {
+  .portraitCard {
+    width: 20%;
+  }
+}
+
+.portraitCard {
+  width: 20%;
 }
